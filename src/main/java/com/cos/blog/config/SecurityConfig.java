@@ -22,13 +22,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private PrincipalDetailService principalDetailService;
-	
-	@Bean
+
+	@Bean		// 어디에서든지 DI 해서 쓸 수 있음 (AuthenticationManager 를 Bean 으로 등록했으므로)
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
-	
+
 	@Bean		// IoC 가 됨
 	public BCryptPasswordEncoder encodePWD() {
 		return new BCryptPasswordEncoder();
