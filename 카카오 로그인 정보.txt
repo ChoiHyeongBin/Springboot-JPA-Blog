@@ -1,0 +1,6 @@
+웹서버주소 : http://localhost:8000
+카카오 클라이언트키 : 752d31d8d512335fc564541ca5649f9d
+Redirect URI : http://localhost:8000/auth/kakao/callback
+
+로그인 요청 주소
+/oauth/authorize?client_id={REST_API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code
