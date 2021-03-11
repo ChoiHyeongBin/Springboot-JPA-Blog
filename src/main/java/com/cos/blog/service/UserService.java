@@ -18,9 +18,20 @@ public class UserService {
 	
 	@Autowired	// encoder 가 DI 가 되서 주입이 됨
 	private BCryptPasswordEncoder encoder;
+	
+	@Transactional(readOnly = true)		// true 인 경우 insert, update, delete 실행 시 예외 발생, 기본 설정은 false
+	// 성능을 최적화하기 위해 사용할 수도 있고 특정 트랜잭션 작업 안에서 쓰기 작업이 일어나는 것을 의도적으로 방지하기 위해 사용할 수도 있음
+	public User memberFind(String username) {
+		User user = userRepository.findByUsername(username).orElseGet(()->{
+			return new User();
+		});
+		
+		return user;
+	}
 
 	@Transactional
 	public void joinMember(User user) {
+			System.out.println("UserService user : " + user);
 		String rawPassword = user.getPassword();		// 1234 원문
 		String encPassword = encoder.encode(rawPassword);	// 해쉬
 		user.setPassword(encPassword);

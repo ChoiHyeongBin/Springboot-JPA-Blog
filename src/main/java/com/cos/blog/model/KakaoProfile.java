@@ -5,32 +5,32 @@ import lombok.Data;
 @Data
 public class KakaoProfile {		// 메인 파일이므로 public 이 붙어있어야 됨
 	public Integer id;
-	public String connectedAt;
+	public String connected_at;
 	public Properties properties;
-	public KakaoAccount kakaoAccount;
+	public KakaoAccount kakao_account;
 
 	@Data
-	class Properties {
+	public class Properties {
 		public String nickname;
-		public String profileImage;
-		public String thumbnailImage;
+		public String profile_image;
+		public String thumbnail_image;
 	}
 	
 	@Data
-	class KakaoAccount {
-		public Boolean profileNeedsAgreement;
+	public class KakaoAccount {
+		public Boolean profile_needs_agreement;
 		public Profile profile;
-		public Boolean hasEmail;
-		public Boolean emailNeedsAgreement;
-		public Boolean isEmailValid;
-		public Boolean isEmailVerified;
+		public Boolean has_email;
+		public Boolean email_needs_agreement;
+		public Boolean is_email_valid;
+		public Boolean is_email_verified;
 		public String email;
 		
 		@Data
-		class Profile {
+		public class Profile {
 			public String nickname;
-			public String thumbnailImageUrl;
-			public String profileImageUrl;
+			public String thumbnail_image_url;
+			public String profile_image_url;
 		}
 	}
 }
