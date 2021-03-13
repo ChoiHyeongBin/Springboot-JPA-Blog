@@ -27,7 +27,7 @@ spring:
     hibernate:
       ddl-auto: update    # create : 서버 시작시마다 DB초기화
       naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl	# 엔티티를 만들 때 변수명 그대로 DB에 필드를 만들어 줌
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl   # 엔티티를 만들 때 변수명 그대로 DB에 필드를 만들어 줌
       use-new-id-generator-mappings: false		# JPA 의 기본 넘버링 전략을 따라가지 않음
     #show-sql: true
     properties:

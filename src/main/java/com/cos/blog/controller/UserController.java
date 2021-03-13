@@ -1,7 +1,5 @@
 package com.cos.blog.controller;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.cos.blog.config.auth.PrincipalDetail;
@@ -58,7 +55,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/auth/kakao/callback")
-	public @ResponseBody String kakaoCallback(String code) {		// @ResponseBody 붙이는 이유 -> Data 를 리턴해주는 컨트롤러 함수
+	public String kakaoCallback(String code) {		// @ResponseBody 붙이는 이유 -> Data 를 리턴해주는 컨트롤러 함수 (현재는 빼서 ViewResolver 를 호출하도록 함)
 		
 		// POST 방식으로 key=value 데이터를 요청 (카카오쪽으로)
 		// Retrofit2 (안드로이드에서 많이 사용)
@@ -141,27 +138,28 @@ public class UserController {
 		
 		System.out.println("블로그서버 유저네임 : " + kakaoProfile.getKakao_account().getEmail() + "_" + kakaoProfile.getId());
 		System.out.println("블로그서버 이메일 : " + kakaoProfile.getKakao_account().getEmail());
-		UUID garbagePassword = UUID.randomUUID();
-		System.out.println("블로그서버 패스워드 : " + garbagePassword);
+		// UUID란 -> 중복되지 않는 어떤 특정 값을 만들어내는 알고리즘
+		// UUID garbagePassword = UUID.randomUUID();
+		System.out.println("블로그서버 패스워드 : " + cosKey);
 		
 		User kakaoUser = User.builder()
 				.username(kakaoProfile.getKakao_account().getEmail() + "_" + kakaoProfile.getId())
-				.password(garbagePassword.toString())
+				.password(cosKey)
 				.email(kakaoProfile.getKakao_account().getEmail())
+				.oauth("kakao")
 				.build();
 		
 		// 가입자 혹은 비가입자 체크해서 처리
 		User originUser = userService.memberFind(kakaoUser.getUsername());
 		
-		System.out.println("222222222222222222222");
 		if (originUser.getUsername() == null) {
-			System.out.println("기존 회원이 아닙니다!!");
+			System.out.println("기존 회원이 아니기에 자동 회원가입을 진행합니다");
 			userService.joinMember(kakaoUser);
 		}
 		
-		System.out.println("333333333333333333333");
+		System.out.println("자동 로그인을 진행합니다.");
 		// 로그인 처리
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(kakaoUser.getUsername(), kakaoUser.getPassword()));
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(kakaoUser.getUsername(), cosKey));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		
 		return "redirect:/";

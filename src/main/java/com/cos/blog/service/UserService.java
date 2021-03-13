@@ -22,7 +22,7 @@ public class UserService {
 	@Transactional(readOnly = true)		// true 인 경우 insert, update, delete 실행 시 예외 발생, 기본 설정은 false
 	// 성능을 최적화하기 위해 사용할 수도 있고 특정 트랜잭션 작업 안에서 쓰기 작업이 일어나는 것을 의도적으로 방지하기 위해 사용할 수도 있음
 	public User memberFind(String username) {
-		User user = userRepository.findByUsername(username).orElseGet(()->{
+		User user = userRepository.findByUsername(username).orElseGet(()->{	// 회원을 찾았는데 없으면 빈 객체를 리턴
 			return new User();
 		});
 		
@@ -31,7 +31,7 @@ public class UserService {
 
 	@Transactional
 	public void joinMember(User user) {
-			System.out.println("UserService user : " + user);
+			// System.out.println("UserService user : " + user);
 		String rawPassword = user.getPassword();		// 1234 원문
 		String encPassword = encoder.encode(rawPassword);	// 해쉬
 		user.setPassword(encPassword);
@@ -47,10 +47,14 @@ public class UserService {
 		User persistance = userRepository.findById(user.getId()).orElseThrow(()->{
 			return new IllegalArgumentException("회원 찾기 실패");
 		});
-		String rawPassword = user.getPassword();
-		String encPassword = encoder.encode(rawPassword);
-		persistance.setPassword(encPassword);
-		persistance.setEmail(user.getEmail());
+		
+		// Validate 체크 => oauth 필드에 값이 없으면 수정 가능
+		if (persistance.getOauth() == null || persistance.getOauth().equals("")) {	// 일반 사용자라면
+			String rawPassword = user.getPassword();
+			String encPassword = encoder.encode(rawPassword);
+			persistance.setPassword(encPassword);
+			persistance.setEmail(user.getEmail());
+		}
 
 		// 회원수정 함수 종료 시 = 서비스 종료 = 트랜잭션 종료 = commit 이 자동으로 됨
 		// 영속화된 persistance 객체의 변화가 감지되면 더티체킹이 되어 update 문을 날려줌
