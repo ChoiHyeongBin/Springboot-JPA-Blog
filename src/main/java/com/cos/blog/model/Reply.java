@@ -17,7 +17,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
+@Builder		// 불필요한 생성자 제거, 데이터의 순서에 상관없이 객체 생성 가능
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
