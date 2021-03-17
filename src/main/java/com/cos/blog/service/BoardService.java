@@ -64,6 +64,13 @@ public class BoardService {
 	
 	@Transactional
 	public void replySave(ReplySaveRequestDto replySaveRequestDto) {
+		int result = replyRepository.mSave(replySaveRequestDto.getUserId(), replySaveRequestDto.getBoardId(), replySaveRequestDto.getContent());
+			System.out.println("BoardService result : " + result);
+	}
+	
+	/* replySave -> 1번째 방법
+	@Transactional
+	public void replySave(ReplySaveRequestDto replySaveRequestDto) {
 		User user = userRepository.findById(replySaveRequestDto.getUserId()).orElseThrow(()->{
 			return new IllegalArgumentException("댓글 쓰기 실패 : 유저 id 를 찾을 수 없습니다.");
 		});	// 영속화 완료
@@ -78,7 +85,8 @@ public class BoardService {
 				.content(replySaveRequestDto.getContent())
 				.build();
 		
-		replyRepository.save(requestReply);
+		replyRepository.save(reply);
 	}
+	*/
 
 }
