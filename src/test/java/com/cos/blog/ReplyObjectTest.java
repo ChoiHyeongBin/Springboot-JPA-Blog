@@ -1,7 +1,7 @@
 package com.cos.blog;
 
 import org.junit.jupiter.api.Test;
-// import org.junit.Test;		// 실행 안됨
+// import org.junit.Test;		// 실행 안됨 -> JUnit 5 에서 실행가능한 듯 (라이브러리가 달라서 안된다고 함)
 
 import com.cos.blog.model.Reply;
 

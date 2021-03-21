@@ -42,13 +42,13 @@
 		<br />
 		<div class="card">
 			<div class="card-header">댓글 리스트</div>
-			<ul id="reply--box" class="list-group">		<!-- 내가 만든건 '-' 를 두 개 붙여주는 게 좋다 -->
+			<ul id="reply-box" class="list-group">		<!-- 내가 만든건 '-' 를 두 개 붙여주는 게 좋다 -->
 				<c:forEach var="reply" items="${board.replys}">	<!-- Board 객체가 reply 를 담고 있음 -->
-					<li id="reply--1" class="list-group-item d-flex justify-content-between">
+					<li id="reply-${reply.id}" class="list-group-item d-flex justify-content-between">
 						<div>${reply.content}</div>
 						<div class="d-flex">
 							<div class="font-italic">작성자 : ${reply.user.username} &nbsp;</div>
-							<button class="badge">삭제</button>
+							<button onclick="index.replyDelete(${board.id}, ${reply.id})" class="badge">삭제</button>		<!-- reply 호출은 var = reply 라고 선언되어 있음 -->
 						</div>
 					</li>
 				</c:forEach>

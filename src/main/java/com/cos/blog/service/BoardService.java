@@ -1,6 +1,5 @@
 package com.cos.blog.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -8,23 +7,38 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.cos.blog.dto.ReplySaveRequestDto;
 import com.cos.blog.model.Board;
-import com.cos.blog.model.Reply;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.BoardRepository;
 import com.cos.blog.repository.ReplyRepository;
-import com.cos.blog.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor		// 의존성 주입 3
 public class BoardService {
 
+	private final BoardRepository boardRepository;		// 의존성 주입 3
+	private final ReplyRepository replyRepository;			// 의존성 주입 3
+	
+	/* 
+	// 의존성 주입 2
+	private BoardRepository boardRepository;
+	private ReplyRepository replyRepository;
+	
+	public BoardService(BoardRepository bRepo, ReplyRepository rRepo) {
+		this.boardRepository = bRepo;
+		this.replyRepository = rRepo;
+	}
+	*/
+	
+	/*
+	// 기존 의존성 주입
 	@Autowired
 	private BoardRepository boardRepository;	// @Autowired 설정 시 boardRepository 에 객체가 들어오게 됨
 	
 	@Autowired
 	private ReplyRepository replyRepository;
-	
-	@Autowired
-	private UserRepository userRepository;
+	*/
 
 	@Transactional
 	public void boardWrite(Board board, User user) {		// title, content
@@ -66,6 +80,11 @@ public class BoardService {
 	public void replySave(ReplySaveRequestDto replySaveRequestDto) {
 		int result = replyRepository.mSave(replySaveRequestDto.getUserId(), replySaveRequestDto.getBoardId(), replySaveRequestDto.getContent());
 			System.out.println("BoardService result : " + result);
+	}
+	
+	@Transactional
+	public void replyDelete(int replyId) {
+		replyRepository.deleteById(replyId);
 	}
 	
 	/* replySave -> 1번째 방법

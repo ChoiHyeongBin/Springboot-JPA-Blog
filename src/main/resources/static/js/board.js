@@ -92,6 +92,21 @@ let index = {
 		}).fail(function(error){
 			alert(JSON.stringify(error));
 		});
+	}, 
+	
+	replyDelete: function(boardId, replyId){
+		$.ajax({
+			type: "DELETE",
+			url: `/api/board/${boardId}/reply/${replyId}`,		// 자바스크립트 문자열과 변수를 같이 쓸 때 편하게 사용하기 위하여 ` (백틱)을 사용한다
+			// data: JSON.stringify(data),		// 들고 가는게 없기 때문에 data 는 필요없음
+			// contentType: "application/json; charset=utf-8",		// 들고 가는게 없기 때문에 contentType 도 필요없음
+			dataType: "json"
+		}).done(function(resp){	
+			alert("댓글삭제 성공");
+			location.href = `/board/${boardId}`;
+		}).fail(function(error){
+			alert(JSON.stringify(error));
+		});
 	}
 	
 }

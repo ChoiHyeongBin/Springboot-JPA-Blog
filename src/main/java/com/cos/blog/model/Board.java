@@ -3,6 +3,7 @@ package com.cos.blog.model;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -48,8 +49,8 @@ public class Board {
 	@JoinColumn(name = "userId")
 	private User user;	// DB는 오브젝트를 저장할 수 없음. FK, 자바는 오브젝트를 저장할 수 있다.
 	
-	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER)	// mappedBy 연관관계의 주인이 아님 (난 FK가 아니에요) DB에 컬럼을 만들지 마세요.
-	@JsonIgnoreProperties({"board"})	// 무한참조 방지
+	@OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)	// mappedBy 연관관계의 주인이 아님 (난 FK가 아니에요) DB에 컬럼을 만들지 마세요.
+	@JsonIgnoreProperties({"board"})	// 무한참조 방지																				// CascadeType.REMOVE -> 게시글을 지울 때 댓글들도 같이 지움
 	@OrderBy("id desc")
 	private List<Reply> replys;	// 나중에 select 하기 위해서 있는 코드
 	
