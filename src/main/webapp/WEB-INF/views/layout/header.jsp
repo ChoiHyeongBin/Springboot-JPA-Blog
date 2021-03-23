@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
-<sec:authorize access="isAuthenticated()">
+<sec:authorize access="isAuthenticated()">		<!-- 권한에 관계없이 로그인 인증을 받은 경우 -->
 		<sec:authentication property="principal" var="principal" />
 </sec:authorize>
 

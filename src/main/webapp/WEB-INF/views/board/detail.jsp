@@ -5,13 +5,13 @@
 <div class="container">
 
 		<button class="btn btn-secondary" onclick="history.back();">돌아가기</button>
-<c:if test="${board.user.id == principal.user.id}">
-<script>
-	console.log("principal.user.id : " + ${principal.user.id});
-</script>
+<c:if test="${board.user.id == principal.user.id}">		<!-- header.jsp 에 변수 principal 이 선언되어 있음 -->
 		<a href="/board/${board.id}/updateForm" class="btn btn-warning">수정</a>
 		<button id="btn-delete" class="btn btn-danger">삭제</button>
 </c:if>
+<script>
+	console.log("principal.user.id : " + ${principal.user.id});
+</script>
 		<br /><br />
 		<div>
 			글 번호 : <span id="id"><i>${board.id} </i></span>
@@ -48,7 +48,9 @@
 						<div>${reply.content}</div>
 						<div class="d-flex">
 							<div class="font-italic">작성자 : ${reply.user.username} &nbsp;</div>
+<c:if test="${board.user.id == principal.user.id}">
 							<button onclick="index.replyDelete(${board.id}, ${reply.id})" class="badge">삭제</button>		<!-- reply 호출은 var = reply 라고 선언되어 있음 -->
+</c:if>
 						</div>
 					</li>
 				</c:forEach>
