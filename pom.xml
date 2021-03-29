@@ -19,6 +19,12 @@
 	<dependencies>
 		<!-- 추가 라이브러리 시작 -->
 		
+		<!-- oauth2 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-client</artifactId>
+		</dependency>
+		
 		<!-- 시큐리티 태그 라이브러리 -->
 		<dependency>
 		  <groupId>org.springframework.security</groupId>
