@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.cos.blog.config.auth.PrincipalDetailService;
+import com.cos.blog.config.oauth.PrincipalOauth2UserService;
 
 // 빈 등록 : 스프링 컨테이너에서 객체를 관리할 수 있게 하는 것
 
@@ -20,6 +21,9 @@ import com.cos.blog.config.auth.PrincipalDetailService;
 @EnableGlobalMethodSecurity(prePostEnabled = true)		// 특정 주소로 접근을 하면 권한 및 인증을 미리 체크하겠다는 뜻
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	@Autowired
+	private PrincipalOauth2UserService principalOauth2UserService;
+	
 	@Autowired
 	private PrincipalDetailService principalDetailService;
 
@@ -44,10 +48,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+			System.out.println("SecurityConfig -> configure()");
 		http
 			.csrf().disable()	// csrf 토큰 비활성화 (테스트 시 걸어두는 게 좋음)
 			.authorizeRequests()		// request 가 들어오면
-				.antMatchers("/", "/auth/**", "/js/**", "/css/**", "/image/**", "/dummy/**")
+				.antMatchers("/", "/auth/**", "/js/**", "/css/**", "/image/**", "/dummy/**", "/oauth2/authorization/google")
 				.permitAll()				// '/auth/**' 로 들어오면 요청을 허용하고
 				.anyRequest()			// '/auth/**', '/js/**' 등이 아닌 다른 모든 요청은
 				.authenticated()		// 인증이 되어야 한다
@@ -58,6 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.defaultSuccessUrl("/")		// 스프링 시큐리티가 해당 주소로 요청이 오는 로그인을 가로채서 대신 로그인을 해줌
 				.and()
 				.oauth2Login()
-				.loginPage("/loginForm");	// 구글 로그인이 완료된 뒤의 후처리가 필요 Tip. 코드X, (엑세스토큰 + 사용자프로필정보 O)
+				.loginPage("user/loginForm")		// 구글 로그인이 완료된 뒤의 후처리가 필요 Tip. 코드X, (엑세스토큰 + 사용자프로필정보 O)
+				.userInfoEndpoint()
+				.userService(principalOauth2UserService);
+				System.out.println("SecurityConfig principalOauth2UserService : " + principalOauth2UserService);
 	}
 }
