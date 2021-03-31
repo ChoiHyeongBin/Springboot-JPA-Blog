@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.csrf().disable()	// csrf 토큰 비활성화 (테스트 시 걸어두는 게 좋음)
 			.authorizeRequests()		// request 가 들어오면
-				.antMatchers("/", "/auth/**", "/js/**", "/css/**", "/image/**", "/dummy/**", "/oauth2/authorization/google")
+				.antMatchers("/", "/auth/**", "/js/**", "/css/**", "/image/**", "/dummy/**")
 				.permitAll()				// '/auth/**' 로 들어오면 요청을 허용하고
 				.anyRequest()			// '/auth/**', '/js/**' 등이 아닌 다른 모든 요청은
 				.authenticated()		// 인증이 되어야 한다
@@ -61,9 +61,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/auth/loginForm")
 				.loginProcessingUrl("/auth/loginProc")
 				.defaultSuccessUrl("/")		// 스프링 시큐리티가 해당 주소로 요청이 오는 로그인을 가로채서 대신 로그인을 해줌
-				.and()
+			.and()
 				.oauth2Login()
-				.loginPage("user/loginForm")		// 구글 로그인이 완료된 뒤의 후처리가 필요 Tip. 코드X, (엑세스토큰 + 사용자프로필정보 O)
+				.loginPage("/auth/loginForm")		// 구글 로그인이 완료된 뒤의 후처리가 필요 Tip. 코드X, (엑세스토큰 + 사용자프로필정보 O)
 				.userInfoEndpoint()
 				.userService(principalOauth2UserService);
 				System.out.println("SecurityConfig principalOauth2UserService : " + principalOauth2UserService);
