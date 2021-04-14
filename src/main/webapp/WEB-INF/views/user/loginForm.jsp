@@ -19,6 +19,7 @@
 	</form>
 	<a href="/oauth2/authorization/google">구글 로그인</a>		<!-- 고정된 주소이기 때문에 내 맘대로 바꿔서는 안됨 -->
 	<a href="/oauth2/authorization/facebook">페이스북 로그인</a>		<!-- google 과 동일 (고정) -->
+	<a href="/oauth2/authorization/naver">네이버 로그인</a>
 
 </div>
 

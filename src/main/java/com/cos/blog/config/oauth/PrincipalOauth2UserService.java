@@ -1,5 +1,7 @@
 package com.cos.blog.config.oauth;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.cos.blog.config.auth.PrincipalDetail;
 import com.cos.blog.config.oauth.provider.FacebookUserInfo;
 import com.cos.blog.config.oauth.provider.GoogleUserInfo;
+import com.cos.blog.config.oauth.provider.NaverUserInfo;
 import com.cos.blog.config.oauth.provider.OAuth2UserInfo;
 import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
@@ -45,8 +48,11 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		} else if (userRequest.getClientRegistration().getRegistrationId().equals("facebook")) {
 			System.out.println("페이스북 로그인 요청");
 			oAuth2UserInfo = new FacebookUserInfo(oauth2User.getAttributes());
+		} else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
+			System.out.println("네이버 로그인 요청");
+			oAuth2UserInfo = new NaverUserInfo((Map)oauth2User.getAttributes().get("response"));
 		} else {
-			System.out.println("구글과 페이스북만 지원합니다.");
+			System.out.println("구글, 페이스북, 네이버만 지원합니다.");
 		}
 
 		// oAuth2UserInfo 객체만 있으면 밑의 코드가 정상 작동함
@@ -77,7 +83,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 			System.out.println("PrincipalOauth2UserService -> userEntity : " + userEntity);
 		
 		if (userEntity == null) {
-			System.out.println("로그인이 최초입니다.");
+			System.out.println("OAuth 로그인이 최초입니다.");
 			userEntity = User.builder()	// Optional.ofNullable() -> value 가 null 인 경우 비어있는 Optional 을 반환함. 값이 null 일수도 있는 것은 해당 메서드를 사용 (삭제)
 					.username(username)
 					.password(password)
